@@ -6,7 +6,7 @@ namespace Trucks
         public string Name { get; }
         public string Driver { get; set; }
         public string State { get; set; }
-        public IState _status { get; set; }
+        public IState _status { get; private set; }
 
         public Truck(int id, string name, string driver, string state)
         {
@@ -27,14 +27,17 @@ namespace Trucks
             }
         }
 
-        public void ChangeState(IState other_status) => _status = other_status;
-        
-        public void ChangeDriver() => _status.ChangeDriver();
-        
-        public void StartRun() => _status.StartRun();
-        
-        public void StartRepair() => _status.StartRepair();
+        public void ChangeState(IState other_status)
+        {
+            _status = other_status;
+            State = other_status.ToString();
+        }
 
+        public void ChangeDriver() => _status.ChangeDriver();
+
+        public void StartRun() => _status.StartRun();
+
+        public void StartRepair() => _status.StartRepair();
 
         public override string ToString()
         {
