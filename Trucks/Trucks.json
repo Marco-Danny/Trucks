@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "Name": "Renault Magnum",
+    "Driver": "Саша",
+    "State": "base"
+  },
+  {
+    "Id": 2,
+    "Name": "Volvo FH12",
+    "Driver": "Петя",
+    "State": "base"
+  },
+  {
+    "Id": 3,
+    "Name": "DAF XF",
+    "Driver": "Вася",
+    "State": "base"
+  }
+] 
