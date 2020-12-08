@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using static System.Int32;
 
 namespace Trucks
 {
@@ -15,7 +16,9 @@ namespace Trucks
         private static List<string> MENU_VARIANTS = new List<string>()
         {
             "Отобразить текущее состояние грузовиков",
-            "Показать данные грузовика по id"
+            "Показать данные грузовика по id",
+            "Изменить водителя",
+            "Обновить состояние грузовика"
         };
 
         public TruckManager(string path)
@@ -36,7 +39,7 @@ namespace Trucks
             {
                 try
                 {
-                    var choice = int.Parse(Console.ReadLine());
+                    var choice = Parse(Console.ReadLine());
                     return choice;
                 }
                 catch (Exception)
@@ -58,7 +61,7 @@ namespace Trucks
                         truck.Id,
                         truck.Name,
                         truck.Driver,
-                        truck.State);
+                        truck.State.ToString());
                 }
             }
             else
@@ -100,6 +103,107 @@ namespace Trucks
             }
         }
 
+        private static void ChangeTruckDriver()
+        {
+            if (IsHaveTrucksData)
+            {
+                var truck = GetTruck();
+                truck.ChangeDriver();
+            }
+            else
+            {
+                Console.WriteLine("Данных о грузовиках нет!");
+            }
+        }
+
+        private static string GetIdAndStateFromUser()
+        {
+            while (true)
+            {
+                Console.WriteLine("Введите через пробел ID и состояние грузовика");
+                var userInput = Console.ReadLine();
+                if (userInput != "" && userInput != " ")
+                {
+                    return userInput;
+                }
+                else
+                {
+                    Console.WriteLine("Вы ничего не ввели!!!");
+                }
+            }
+        }
+
+        private static string[] ParseUserStringIdState()
+        {
+            while (true)
+            {
+                var userString = GetIdAndStateFromUser();
+                string[] data = userString.Split(" ");
+                var inputId = data[0];
+                var inputState = data[1];
+                if (inputState != "run" || inputState != "repair")
+                {
+                    try
+                    {
+                        Parse(inputId);
+                        return data;
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("ид должно быть числвым");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Состояние должно быть \"run\" или \"repair\" ");
+                }
+            }
+        }
+
+        private static void ChangeTruckState()
+        {
+            if (IsHaveTrucksData)
+            {
+                while (true)
+                {
+                    string[] inputIdAndState = ParseUserStringIdState();
+                    var inputId = inputIdAndState[0];
+                    var inputState = inputIdAndState[1];
+                    var Id = Parse(inputId);
+                    Truck truck = null;
+                    foreach (var tr in _trucks)
+                    {
+                        if (tr.Id == Id)
+                        {
+                            truck = tr;
+                        }
+                    }
+                    
+                    if (isCorrectUserChoice(Id, _trucks))
+                    {
+                        switch (inputState)
+                        {
+                            case "run":
+                                truck._status.StartRun();
+                                break;
+                            case "repair":
+                                truck._status.StartRepair();
+                                break;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Нет такого грузовика!!!");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Данных о грузовиках нет!");
+            }
+        }
+
         private static void ShowMenuVariants()
         {
             for (var i = 0; i < MENU_VARIANTS.Count; i++)
@@ -126,9 +230,14 @@ namespace Trucks
                         case 2:
                             ShowTruckById();
                             break;
+                        case 3:
+                            ChangeTruckDriver();
+                            break;
+                        case 4:
+                            ChangeTruckState();
+                            break;
                     }
                 }
-
                 else
                 {
                     Console.WriteLine("Такого варианта нет!!!");
