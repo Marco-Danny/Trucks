@@ -8,7 +8,10 @@ namespace Trucks
         static void Main(string[] args)
         {
             // C:\Users\admin\C# projects\Trucks\Trucks\Trucks.json
-            string path = GetPathFromUser();
+            // string path = GetPathFromUser();
+            var path = @"C:\Users\admin\C# projects\Trucks\Trucks\Trucks.json";
+            var manager = new TruckManager(path);
+            TruckManager.Menu();
         }
 
         private static string GetPathFromUser()
