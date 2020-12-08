@@ -9,6 +9,10 @@ namespace Trucks
 {
     public class DataLoader
     {
+        private static string _path;
+
+        public DataLoader(string path) => _path = path;
+        
         public List<Truck> Load(string path)
         {
             try
@@ -23,11 +27,7 @@ namespace Trucks
                 return new List<Truck>();
             }
         }
-
-        private static string _path;
-
-        public DataLoader(string path) => _path = path;
-
+        
         public void Save(List<Truck> trucks)
         {
             var jsonFormatter = new DataContractJsonSerializer(typeof(List<Truck>));
