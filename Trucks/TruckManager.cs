@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using static System.Int32;
 
 namespace Trucks
 {
     public class TruckManager
     {
-        private string _path;
+        private static string _path;
         private static List<Truck> _trucks = new List<Truck>();
         private static bool isCorrectUserChoice(int input, ICollection data) => input > 0 && input <= data.Count;
         private static bool IsHaveTrucksData => _trucks.Count > 0;
@@ -18,7 +19,8 @@ namespace Trucks
             "Отобразить текущее состояние грузовиков",
             "Показать данные грузовика по id",
             "Изменить водителя",
-            "Обновить состояние грузовика"
+            "Обновить состояние грузовика",
+            "Выгрузить данные"
         };
 
         public TruckManager(string path)
@@ -29,7 +31,7 @@ namespace Trucks
 
         private void GetTrucksFromJson(string path)
         {
-            var dataloader = new DataLoader();
+            var dataloader = new DataLoader(_path);
             _trucks = dataloader.Load(path);
         }
 
@@ -212,6 +214,12 @@ namespace Trucks
             }
         }
 
+        private static void LoadData()
+        {
+            var dataloader = new DataLoader(_path);
+            dataloader.Save(_trucks);
+        }
+
         public static void Menu()
         {
             while (true)
@@ -235,6 +243,9 @@ namespace Trucks
                             break;
                         case 4:
                             ChangeTruckState();
+                            break;
+                        case 5:
+                            LoadData();
                             break;
                     }
                 }

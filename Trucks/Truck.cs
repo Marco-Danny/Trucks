@@ -1,11 +1,14 @@
+using System.Runtime.Serialization;
+
 namespace Trucks
 {
+    [DataContract]
     public class Truck : IState
     {
-        public int Id { get; }
-        public string Name { get; }
-        public string Driver { get; set; }
-        public string State { get; set; }
+        [DataMember] public int Id { get; set; }
+        [DataMember] public string Name { get; set; }
+        [DataMember] public string Driver { get; set; }
+        [DataMember] public string State { get; set; }
         public IState _status { get; private set; }
 
         public Truck(int id, string name, string driver, string state)
